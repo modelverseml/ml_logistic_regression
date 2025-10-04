@@ -261,3 +261,19 @@ F1 = 2 \cdot \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \te
 $$
 
 <p align="center"> <img src="images/prec_rec.webp" alt="Tradeoff " width="50%"/> </p>
+
+### ROC (Receiver Operating Characteristic) curve
+
+The ROC curve is a graphical representation that shows the trade-off between the True Positive Rate (TPR / Recall / Sensitivity) and the False Positive Rate (FPR = 1 – Specificity) across different classification thresholds.
+
+- Goal: For an ideal model, we want the TPR to be as high as possible while keeping the FPR as low as possible.
+- Ideal case: TPR = 1, FPR = 0
+
+After plotting TPR vs FPR for various thresholds, we calculate the Area Under the Curve (AUC):
+
+- AUC close to 1: Excellent model performance
+- AUC ≈ 0.5: Model performs no better than random guessing
+
+The ROC curve is especially useful in imbalanced datasets or when different thresholds need to be evaluated, such as in medical diagnosis, fraud detection, or risk assessment.
+
+<p align="center"> <img src="images/AUC-ROC-Curve.webp" alt="ROC Curve " width="50%"/> </p>
