@@ -98,3 +98,15 @@ In this technique, new synthetic samples for the minority class are generated ba
 It is similar to SMOTE , but is more focused on the minority dataset which are hard to detect
 - Advantage : Helps the model pay more attention to difficult cases, improving learning for the minority class.
 - Disadvantage: Can introduce noise if too many synthetic samples are generated in sparse regions, potentially affecting model accuracy.
+
+  SMOTETomek (Oversampling followed by Undersampling)
+
+### SMOTETomek is a hybrid technique that combines SMOTE oversampling with Tomek link undersampling:
+
+SMOTE: First, synthetic minority class samples are generated to balance the dataset.
+
+Tomek Links: Then, Tomek links (pairs of nearest neighbor samples from opposite classes that are very close) are removed, usually from the majority class. This cleans overlapping samples and reduces class ambiguity.
+
+- Advantage: Balances the dataset while removing noisy or overlapping majority samples, improving model performance.
+
+- Disadvantage: Slightly more complex and may remove some useful majority class samples if not applied carefully.
