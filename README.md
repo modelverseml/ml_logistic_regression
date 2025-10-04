@@ -52,3 +52,44 @@ This output can then be interpreted as the probability of a data point belonging
 
 By setting a threshold (commonly 0.5), we can classify whether a point belongs to Class 0 or Class 1.
 
+
+## Data Imbalance
+
+One of the most important issues in classification problems is data imbalance. For example, imagine we have a dataset where 95% of the samples belong to one class and only 5% belong to the other class. If we train a model on this dataset and see an accuracy of 95%, does that mean the model is good?
+
+Not necessarily. Accuracy can be misleading in imbalanced datasets. In this scenario, the model could simply predict the majority class for every input and still achieve high accuracy, while completely ignoring the minority class. Behind the scenes, the model might have learned nothing about the smaller class, which can be critical depending on the application (e.g., fraud detection, disease diagnosis).
+
+To properly evaluate models on imbalanced data, we should use metrics like:
+
+- Precision, Recall, F1-score – to measure performance on each class separately
+
+- Confusion Matrix – to visualize how many samples of each class are correctly or incorrectly classified
+
+- ROC-AUC – to evaluate the model’s discriminative ability
+
+We’ll discuss these metrics later, but for now, let’s look at the ways to address data imbalance.
+
+## Data Imbalace Techniques
+
+There are different techniques to tackle data imbalance problems. Some of them are:
+
+### Random Undersampling
+
+In this technique, instead of increasing the minority class, we reduce the number of samples in the majority class so that the dataset becomes more balanced.
+
+- Disadvantages:
+
+  - Important information from the majority class may be lost, which can affect model performance.
+ 
+### Random Oversampling
+
+In this technique, we increase the number of samples in the minority class, often by duplicating existing data points, to balance the dataset.
+
+- Disadvantage:
+
+  - It can reduce the originality of the data, as no new unique information is added, which may lead to overfitting
+ 
+### Synthetic minority oversampling technique (SMOTE)
+
+
+ 
