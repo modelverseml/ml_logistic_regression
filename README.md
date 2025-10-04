@@ -62,9 +62,7 @@ Not necessarily. Accuracy can be misleading in imbalanced datasets. In this scen
 To properly evaluate models on imbalanced data, we should use metrics like:
 
 - Precision, Recall, F1-score – to measure performance on each class separately
-
 - Confusion Matrix – to visualize how many samples of each class are correctly or incorrectly classified
-
 - ROC-AUC – to evaluate the model’s discriminative ability
 
 We’ll discuss these metrics later, but for now, let’s look at the ways to address data imbalance.
@@ -78,7 +76,6 @@ There are different techniques to tackle data imbalance problems. Some of them a
 In this technique, instead of increasing the minority class, we reduce the number of samples in the majority class so that the dataset becomes more balanced.
 
 - Disadvantages:
-
   - Important information from the majority class may be lost, which can affect model performance.
  
 ### Random Oversampling
@@ -86,10 +83,18 @@ In this technique, instead of increasing the minority class, we reduce the numbe
 In this technique, we increase the number of samples in the minority class, often by duplicating existing data points, to balance the dataset.
 
 - Disadvantage:
-
   - It can reduce the originality of the data, as no new unique information is added, which may lead to overfitting
  
-### Synthetic minority oversampling technique (SMOTE)
+### Synthetic Minority Oversampling Technique (SMOTE)
 
+In this technique, new synthetic samples for the minority class are generated based on the similarity between existing minority class samples.
 
- 
+- Instead of simply duplicating data, SMOTE creates new, slightly different data points to help balance the dataset.
+- Advantage: Helps the model learn better patterns from the minority class without overfitting to duplicates.
+- Disadvantage: May generate samples that overlap with the majority class, potentially introducing some noise.
+
+### Adaptive Synthetic Sampling Method (ADASYN)
+
+It is similar to SMOTE , but is more focused on the minority dataset which are hard to detect
+- Advantage : Helps the model pay more attention to difficult cases, improving learning for the minority class.
+- Disadvantage: Can introduce noise if too many synthetic samples are generated in sparse regions, potentially affecting model accuracy.
