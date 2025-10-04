@@ -113,9 +113,9 @@ It is similar to SMOTE , but is more focused on the minority dataset which are h
 - Advantage : Helps the model pay more attention to difficult cases, improving learning for the minority class.
 - Disadvantage: Can introduce noise if too many synthetic samples are generated in sparse regions, potentially affecting model accuracy.
 
-  SMOTETomek (Oversampling followed by Undersampling)
+### SMOTETomek (Oversampling followed by Undersampling)
 
-### SMOTETomek is a hybrid technique that combines SMOTE oversampling with Tomek link undersampling:
+SMOTETomek is a hybrid technique that combines SMOTE oversampling with Tomek link undersampling:
 
 SMOTE: First, synthetic minority class samples are generated to balance the dataset.
 
@@ -276,4 +276,11 @@ After plotting TPR vs FPR for various thresholds, we calculate the Area Under th
 
 The ROC curve is especially useful in imbalanced datasets or when different thresholds need to be evaluated, such as in medical diagnosis, fraud detection, or risk assessment.
 
-<p align="center"> <img src="images/AUC-ROC-Curve.webp" alt="ROC Curve " width="50%"/> </p>
+<p align="center"> <img src="images/AUC-ROC-Curve.webp" alt="ROC Curve" width="50%"/> </p>
+
+## Other Tradeoff
+
+we can also draw the trade off for accuracy, sensitivity and specificity
+
+<p align="center"> <img src="images/acc_sen_spec.jpg" alt="Trade Off" width="50%"/> </p>
+
