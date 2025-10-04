@@ -51,3 +51,4 @@ Unlike linear regression, which predicts continuous values, logistic regression 
 This output can then be interpreted as the probability of a data point belonging to a certain class.
 
 By setting a threshold (commonly 0.5), we can classify whether a point belongs to Class 0 or Class 1.
+
