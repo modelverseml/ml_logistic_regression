@@ -43,6 +43,11 @@ Classification problems require not just a boundary, but also a way to estimate 
 
 This is where models like Logistic Regression come into play, as they help estimate probabilities while drawing effective decision boundaries.
 
+<p align="center">
+<img src="images/classification.jpg" alt="Classification" width="50%"/>
+</p>
+
+
 
 ## Logistic Regression
 
@@ -51,6 +56,11 @@ Unlike linear regression, which predicts continuous values, logistic regression 
 This output can then be interpreted as the probability of a data point belonging to a certain class.
 
 By setting a threshold (commonly 0.5), we can classify whether a point belongs to Class 0 or Class 1.
+
+<p align="center">
+<img src="images/logistic_regression.png" alt="Logistic Regression" width="50%"/>
+</p>
+
 
 
 ## Data Imbalance
@@ -92,6 +102,10 @@ In this technique, new synthetic samples for the minority class are generated ba
 - Instead of simply duplicating data, SMOTE creates new, slightly different data points to help balance the dataset.
 - Advantage: Helps the model learn better patterns from the minority class without overfitting to duplicates.
 - Disadvantage: May generate samples that overlap with the majority class, potentially introducing some noise.
+
+<p align="center">
+<img src="images/smote.webp" alt="SMOTE" width="50%"/>
+</p>
 
 ### Adaptive Synthetic Sampling Method (ADASYN)
 
