@@ -1,8 +1,8 @@
 jupyter
 ipykernel
+numpy
 pandas
 matplotlib
 seaborn
-openpyxl
 scikit-learn
 statsmodels
