@@ -1,9 +1,137 @@
-# ML Classification
+# ML Classification & Logistic Regression
 
 Have you ever wondered how spam emails are detected, why some loan requests get rejected, or how Google Images can accurately recognize objects?
 All of these are real-world applications of classification in Machine Learning.
 
 In this section, we’ll explore what classification means, how to build a simple classification model, and the key metrics used to evaluate its performance.
+
+## Repository Structure
+
+```
+ml_logistic_regression/
+├── README.md
+├── requirements.txt
+├── logistic_regression.ipynb                   # End-to-end walkthrough
+├── logistic_regression_model_building.py       # From-scratch GD on binary cross-entropy
+├── sklearn_logistic_model_building.py          # scikit-learn LogisticRegression wrapper
+├── statsmodel_logistic_model_building.py       # statsmodels Binomial GLM (with inference)
+├── classification_metrics.py                   # Confusion matrix, ROC, PR, cutoff sweep
+├── automated_feature_selection.py              # Backward elimination using p-value + VIF
+├── recursive_feature_elimination.py            # RFE wrapper around LogisticRegression
+├── variance_inflation_factor_data.py           # VIF computation for multicollinearity
+├── Files/
+│   └── diabetes_dataset.csv
+└── images/
+```
+
+## Getting Started
+
+```bash
+git clone https://github.com/modelverseml/ml_logistic_regression.git
+cd ml_logistic_regression
+pip install -r requirements.txt
+jupyter notebook logistic_regression.ipynb
+```
+
+## Dataset
+
+The notebook uses **`Files/diabetes_dataset.csv`** — patient-level features used to predict whether a person has diabetes. It's a typical binary classification problem with class imbalance, which makes it a good fit for the precision/recall/ROC-AUC discussion below.
+
+## Topics Covered
+
+1. [What is Classification?](#what-is-classification) — supervised learning, binary vs multi-class
+2. [Logistic Regression — the Math](#logistic-regression--the-math) — sigmoid, log-odds, log-loss, gradient
+3. [Data Imbalance](#data-imbalance) — why accuracy can lie, and how to fix it (under/oversampling, SMOTE, ADASYN, SMOTETomek)
+4. [Metrics](#metrics) — confusion matrix, accuracy, precision, recall, specificity, F1, ROC-AUC
+5. [Threshold Tuning](#precision-recall-trade-off-diagram--f1-score) — picking the right cutoff for imbalanced problems
+
+## Code Modules
+
+The three fitting wrappers (from-scratch GD, scikit-learn, statsmodels) share the same `build_model / predict / predict_proba / get_parameters` interface so they can be swapped in the notebook.
+
+### Fitting a model
+
+```python
+from logistic_regression_model_building import LogisticRegressionModel
+from sklearn_logistic_model_building import SkLearnLogisticModel
+from statsmodel_logistic_model_building import SMLogisticModel
+
+# From-scratch GD — scale your features first (e.g. StandardScaler)
+model = LogisticRegressionModel(X_train, y_train, learning_rate=0.1, n_iterations=5000)
+model.build_model()
+y_proba = model.predict_proba(X_test)        # P(y = 1 | X)
+y_pred  = model.predict(X_test, threshold=0.5)
+model.get_parameters()                       # DataFrame of (feature, coefficient)
+
+# scikit-learn — forwards extra kwargs like class_weight='balanced'
+model = SkLearnLogisticModel(X_train, y_train, class_weight='balanced')
+
+# statsmodels — also exposes .summary() with z/p-values per coefficient
+model = SMLogisticModel(X_train, y_train)
+model.build_model()
+print(model.summary())
+```
+
+### Evaluating a model
+
+```python
+from classification_metrics import ClassificationMetrics
+
+metrics = ClassificationMetrics(y_test, y_pred, y_proba)
+metrics.get_metrics()                # Accuracy, Precision, Recall, Specificity, F1, ROC-AUC
+metrics.plot_confusion_matrix()
+metrics.plot_roc_curve()
+metrics.plot_precision_recall_curve()
+cutoff_df = metrics.cutoff_table()   # Sensitivity / specificity / accuracy at every threshold
+```
+
+### Feature selection
+
+```python
+from recursive_feature_elimination import RfeClass
+from automated_feature_selection import final_data
+from variance_inflation_factor_data import VIF
+
+# Pick top-k features by sklearn RFE (use scaled features for fair comparison)
+rfe = RfeClass(X_train, y_train, number_of_features=20)
+top_columns = rfe.get_rfe_output()
+
+# Backward elimination until every feature has p ≤ 0.05 and VIF ≤ 10
+selected = final_data(X_train, y_train)
+
+# Standalone VIF check
+vif_df = VIF(X_train).get_vif_values()
+```
+
+## Logistic Regression — the Math
+
+Linear regression predicts a continuous number; that doesn't sit well with a 0/1 target. Logistic regression keeps the same linear combination of features but squashes it into a probability via the **sigmoid**:
+
+p(x) = σ(Xβ) = 1 / (1 + e<sup>−Xβ</sup>)
+
+Equivalently, the **log-odds** (logit) of the positive class is linear in the features:
+
+log( p / (1 − p) ) = Xβ
+
+### Loss function
+
+We fit β by maximising the likelihood of the observed labels — equivalently, minimising the **binary cross-entropy / log-loss**:
+
+L(β) = −(1/n) Σ<sub>i</sub> [ y<sub>i</sub> · log(p<sub>i</sub>) + (1 − y<sub>i</sub>) · log(1 − p<sub>i</sub>) ]
+
+Two properties worth knowing:
+- Convex in β, so gradient descent converges to the global optimum (no local minima).
+- The gradient has the same clean form as ordinary least squares:
+
+∇L(β) = (1 / n) · X<sup>T</sup> (σ(Xβ) − y)
+
+### Update rule
+
+So batch gradient descent is just:
+
+β := β − α · (1 / n) · X<sup>T</sup> (σ(Xβ) − y)
+
+This is exactly what [`logistic_regression_model_building.py`](logistic_regression_model_building.py) implements — that's the entire training loop.
 
 ## What is Classification?
 
@@ -77,7 +205,7 @@ To properly evaluate models on imbalanced data, we should use metrics like:
 
 We’ll discuss these metrics later, but for now, let’s look at the ways to address data imbalance.
 
-## Data Imbalace Techniques
+## Data Imbalance Techniques
 
 There are different techniques to tackle data imbalance problems. Some of them are:
 

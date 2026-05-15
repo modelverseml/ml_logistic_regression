@@ -1,39 +1,45 @@
-from statsmodels.stats.outliers_influence import variance_inflation_factor
-import pandas as pd
+"""
+Variance Inflation Factor (VIF)
+-------------------------------
+VIF quantifies how much the variance of a regression coefficient is inflated
+because of linear dependence with other features. For feature X_j,
 
+    VIF_j = 1 / (1 - R_j^2)
 
-'''
-VIF (Variance Inflation Factor) Class
---------------------------------------
-This class computes VIF values for features in a given DataFrame.
-It helps detect multicollinearity in regression problems.
+where R_j^2 is the R-squared of the regression of X_j on all other features.
+
+Rules of thumb:
+    VIF ≈ 1   -> no correlation with other features
+    VIF 1–5  -> moderate, usually acceptable
+    VIF > 10 -> problematic multicollinearity, consider dropping the feature
+
+VIF applies to the design matrix and is independent of the link function,
+so it is just as valid for logistic regression as for OLS.
 
 Usage:
-------
-from vif_module import VIF   # if saved as vif_module.py
+    vif_df = VIF(X_train).get_vif_values()
+"""
 
-vif_calc = VIF(X_train)      # pass training features
-vif_df = vif_calc.get_vif()  # get DataFrame with VIF values
-
-'''
+import pandas as pd
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 
 class VIF:
 
-    def __init__(self, X_train = pd.DataFrame()):
+    def __init__(self, X_train=None):
 
-        self.X_train = X_train
-        self.vif = pd.DataFrame(columns=['Features','VIF'])
-        
+        self.X_train = X_train if X_train is not None else pd.DataFrame()
+        self.vif = pd.DataFrame(columns=['Features', 'VIF'])
+
     def get_vif_values(self):
+        """Return a DataFrame of (feature, VIF) pairs sorted by VIF desc."""
 
         self.vif['Features'] = self.X_train.columns
         self.vif['VIF'] = [
-            variance_inflation_factor(self.X_train.values,i) 
-            for i in range (self.X_train.shape[1])
+            variance_inflation_factor(self.X_train.values, i)
+            for i in range(self.X_train.shape[1])
         ]
-        self.vif ['VIF'] = round(self.vif['VIF'],2)
-        self.vif = self.vif.sort_values(by=['VIF'],ascending=False)
+        self.vif['VIF'] = round(self.vif['VIF'], 2)
+        self.vif = self.vif.sort_values(by=['VIF'], ascending=False)
 
         return self.vif
-    
